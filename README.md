@@ -19,4 +19,4 @@ And in my template I might have something like:
         <h1>Welcome guest!</h1>
     {{/if}}
 
-The time and extra clutter in handlers could be saved by including request.auth.credentials in the default template context.
+This module saves the work by ensuring `request.auth.credentials` is included in every view context on your server.
