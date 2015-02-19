@@ -4,6 +4,8 @@ For pretty much any website that has a login feature, parts of the page will be 
 
 I usually build my sites out at first without any auth and then add auth at a later stage. If I'm using a common layout, I would later need to add something like the following to the handler of every route.
 
+###Listing 1.1
+
     handler: function (request, reply) {
         ...
         reply.view('index', {
@@ -13,10 +15,12 @@ I usually build my sites out at first without any auth and then add auth at a la
   
 And in my template I might have something like:
 
+###Listing 1.2
+
     {{#if credentials.firstName}}
         <h1>Welcome back {{credentials.firstName}}!</h1>
     {{else}}
         <h1>Welcome guest!</h1>
     {{/if}}
 
-This module saves the work by ensuring `request.auth.credentials` is included in every view context on your server.
+This module saves the work by ensuring `request.auth.credentials` is included in every view context on your server, so you don't need to manually include it in your handlers (like listing.1.1).
