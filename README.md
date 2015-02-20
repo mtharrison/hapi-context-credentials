@@ -1,5 +1,9 @@
 # hapi-context-credentials
 
+##Install
+
+`npm install --save hapi-context-credentials`
+
 ##Background
 
 For pretty much any website that has a login feature, parts of the page will be rendered conditionally based on the current user's state. Perhaps it will display their username in the header and show a logout button for logged-in users.
