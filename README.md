@@ -27,7 +27,7 @@ And in my template I might have something like:
         <h1>Welcome guest!</h1>
     {{/if}}
 
-This module saves the work by ensuring `request.auth.credentials` is included in every view context on your server, so you don't need to manually include it in your handlers (like listing.1.1).
+This module saves the work by ensuring `request.auth.credentials` is included in every view context on your server, so you don't need to manually include it in your handlers.
 
 ##Usage
 
