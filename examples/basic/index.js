@@ -30,9 +30,11 @@ server.register([
         // Just authenticate everyone and store username
         // in credentials
 
-        callback(null, true, {
-            username: username
-        });
+        if (username === 'john' && password === 'secret') {
+            return callback(null, true, {username: 'john'});    
+        }
+
+        return callback(null, false, {});
     };
 
     server.auth.strategy('simple', 'basic', {
@@ -41,7 +43,10 @@ server.register([
 
     server.route([{
             config: {
-                auth: 'simple'
+                auth: {
+                    strategy: 'simple',
+                    mode: 'try'
+                }
             },
             method: 'GET',
             path: '/hbs',
@@ -51,7 +56,10 @@ server.register([
             }
         }, {
             config: {
-                auth: 'simple'
+                auth: {
+                    strategy: 'simple',
+                    mode: 'try'
+                }
             },
             method: 'GET',
             path: '/jade',
