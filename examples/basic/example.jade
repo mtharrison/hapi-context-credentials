@@ -1,0 +1,9 @@
+doctype html
+html(lang="en")
+  head
+    title= Example
+  body
+    if credentials
+      h1 Hello #{credentials.username}!
+    else
+      h1 Hello guest!
