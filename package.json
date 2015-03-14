@@ -1,6 +1,6 @@
 {
   "name": "hapi-context-credentials",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Include `request.auth.credentials` in template view context",
   "main": "index.js",
   "author": "Matt Harrison <hi@matt-harrison.com>",
