@@ -4,7 +4,7 @@ exports.register = function (server, options, next) {
         var response = request.response;
         if (response.variety && response.variety === "view") {
             response.source.context = response.source.context || {};
-            response.source.context.credentials = request.auth.isAuthenticated ? request.auth.credentials : {};
+            response.source.context.credentials = request.auth.isAuthenticated ? request.auth.credentials : null;
         }
         return reply.continue();
     });
