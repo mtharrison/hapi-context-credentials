@@ -1,5 +1,7 @@
 # hapi-context-credentials
 
+[![Build Status](https://travis-ci.org/mtharrison/hapi-context-credentials.svg)](https://travis-ci.org/mtharrison/hapi-context-credentials)
+
 Hapi.js plugin - Include `request.auth.credentials` in default view context 
 
 ##Install
