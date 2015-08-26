@@ -4,34 +4,31 @@ var Path = require('path');
 var server = new Hapi.Server();
 server.connection({ port: 4000 });
 
-server.views({
-    engines: {
-        hbs: require('handlebars'),
-        jade: require('jade')
-    },
-    path: __dirname,
-    isCached: false
-});
-
 server.register([
-    {
-        register: require('../../index'),       // hapi-context-credentials
-    }, {
-        register: require('hapi-auth-basic')
-    }
+    { register: require('vision') },
+    { register: require('hapi-auth-basic') },
+    { register: require('../../index') }
 ], function (err) {
 
     if (err) {
         throw err;
     }
 
-    var validateFunc = function (username, password, callback) {
+    server.views({
+        engines: {
+            hbs: require('handlebars')
+        },
+        path: __dirname,
+        isCached: false
+    });
+
+    var validateFunc = function (request, username, password, callback) {
 
         // Just authenticate everyone and store username
         // in credentials
 
         if (username === 'john' && password === 'secret') {
-            return callback(null, true, {username: 'john'});    
+            return callback(null, true, { username: 'john' });
         }
 
         return callback(null, false, {});
@@ -41,7 +38,8 @@ server.register([
         validateFunc: validateFunc
     });
 
-    server.route([{
+    server.route([
+        {
             config: {
                 auth: {
                     strategy: 'simple',
@@ -49,28 +47,29 @@ server.register([
                 }
             },
             method: 'GET',
-            path: '/hbs',
-            handler: function(request, reply) {
+            path: '/',
+            handler: function (request, reply) {
 
-                reply.view('example.hbs');          // Handlebars example
+                reply.view('home');
             }
-        }, {
+        },
+        {
             config: {
                 auth: {
-                    strategy: 'simple',
-                    mode: 'try'
+                    strategy: 'simple'
                 }
             },
             method: 'GET',
-            path: '/jade',
-            handler: function(request, reply) {
+            path: '/login',
+            handler: function (request, reply) {
 
-                reply.view('example.jade');         // Jade example
+                return reply.redirect('/');
             }
         }
     ]);
 
-    server.start(function() {
-        console.log('Started server');
+    server.start(function () {
+
+        console.log('Started serverx');
     });
 });

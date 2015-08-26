@@ -1,14 +1,23 @@
 {
   "name": "hapi-context-credentials",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Include `request.auth.credentials` in template view context",
   "main": "index.js",
-  "author": "Matt Harrison <hi@matt-harrison.com>",
-  "license": "MIT",
-  "dependencies": {
-    "handlebars": "^3.0.0",
-    "hapi": "^8.4.0",
-    "hapi-auth-basic": "^2.0.0",
-    "jade": "^1.9.2"
+  "author": "Matt Harrison",
+  "license": "BSD-3-Clause",
+  "scripts": {
+    "test": "lab -a code -t 100 -L",
+    "test-cov-html": "lab -a code -r html -o coverage.html"
+  },
+  "peerDependencies": {
+    "hapi": ">=8.x.x"
+  },
+  "devDependencies": {
+    "code": "^1.5.0",
+    "handlebars": "3.x.x",
+    "hapi": "9.x.x",
+    "hapi-auth-basic": "3.x.x",
+    "lab": "^5.15.2",
+    "vision": "^3.0.0"
   }
 }

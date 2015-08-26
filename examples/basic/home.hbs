@@ -6,9 +6,10 @@
 </head>
 <body>
     {{#if credentials}}
-    <h1>Hello {{credentials.username}}!</h1>
+        <h1>Hello {{credentials.username}}!</h1>
     {{else}}
-    <h1>Hello guest!</h1>
+        <h1>Hello guest!</h1>
+        <a href="/login">You can login here</a>
     {{/if}}
 </body>
 </html>
