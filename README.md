@@ -41,10 +41,15 @@ Just register like any Hapi plugin:
             throw err;
         }
         
-        server.start();
+        server.start(function (err) {
+
+            if (err) {
+                throw err;
+            }
+        });
     });
     
-You can then output `crendetials` in your views. 
+You can then output `credentials` in your views. 
 
 ##Credit
 
