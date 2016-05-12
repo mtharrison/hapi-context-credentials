@@ -19,7 +19,7 @@ handler: function (request, reply) {
     ...
     reply.view('index', {
         credentials: request.auth.credentials
-    })
+    });
 }
 ```
   
