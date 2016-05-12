@@ -38,7 +38,7 @@ This module saves the work by ensuring `request.auth.credentials` is included in
 Just register like any Hapi plugin:
 
 ```js
-server.register([{register: require('hapi-context-credentials')}], function (err) {
+server.register(require('hapi-context-credentials'), (err) => {
     
     if (err) {
         throw err;
@@ -49,6 +49,7 @@ server.register([{register: require('hapi-context-credentials')}], function (err
         if (err) {
             throw err;
         }
+        console.log('Server started!');
     });
 });
 ```
