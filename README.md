@@ -14,12 +14,14 @@ For pretty much any website that has a login feature, parts of the page will be 
 
 I usually build my sites out at first without any auth and then add auth at a later stage. If I'm using a common layout, I would later need to add something like the following to the handler of every route.
 
-    handler: function (request, reply) {
-        ...
-        reply.view('index', {
-            credentials: request.auth.credentials
-        })
-    }
+```js
+handler: function (request, reply) {
+    ...
+    reply.view('index', {
+        credentials: request.auth.credentials
+    })
+}
+```
   
 And in my template I might have something like:
 
@@ -35,21 +37,21 @@ This module saves the work by ensuring `request.auth.credentials` is included in
 
 Just register like any Hapi plugin:
 
-    ...
+```js
+server.register([{register: require('hapi-context-credentials')}], function (err) {
+    
+    if (err) {
+        throw err;
+    }
+    
+    server.start(function (err) {
 
-    server.register([{register: require('hapi-context-credentials')}], function (err) {
-        
         if (err) {
             throw err;
         }
-        
-        server.start(function (err) {
-
-            if (err) {
-                throw err;
-            }
-        });
     });
+});
+```
     
 You can then output `credentials` in your views. 
 
