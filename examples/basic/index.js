@@ -1,14 +1,14 @@
-var Hapi = require('hapi');
-var Path = require('path');
+'use strict';
 
-var server = new Hapi.Server();
-server.connection({ port: 4000 });
+const Hapi = require('hapi');
+
+const server = new Hapi.Server({ port: 4000 });
 
 server.register([
     { register: require('vision') },
     { register: require('hapi-auth-basic') },
     { register: require('../../index') }
-], function (err) {
+], (err) => {
 
     if (err) {
         throw err;
@@ -22,7 +22,7 @@ server.register([
         isCached: false
     });
 
-    var validateFunc = function (request, username, password, callback) {
+    const validateFunc = function (request, username, password, callback) {
 
         // Just authenticate everyone and store username
         // in credentials
@@ -35,7 +35,7 @@ server.register([
     };
 
     server.auth.strategy('simple', 'basic', {
-        validateFunc: validateFunc
+        validateFunc
     });
 
     server.route([
@@ -68,7 +68,7 @@ server.register([
         }
     ]);
 
-    server.start(function () {
+    server.start(() => {
 
         console.log('Started serverx');
     });

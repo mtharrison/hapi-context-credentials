@@ -14,7 +14,6 @@ const internals = {};
 // Test shortcuts
 
 const lab = exports.lab = Lab.script();
-const describe = lab.describe;
 const it = lab.it;
 const expect = Code.expect;
 
