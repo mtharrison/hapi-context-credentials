@@ -21,7 +21,6 @@ var expect = Code.expect;
 it('doesn\'t interfere with non view responses', function (done) {
 
     var server = new Hapi.Server();
-    server.connection();
     server.register(require('../'), function (err) {
 
         expect(err).to.not.exist();
@@ -48,7 +47,6 @@ it('doesn\'t interfere with non view responses', function (done) {
 it('doesn\'t include credentials if not authenticated', function (done) {
 
     var server = new Hapi.Server();
-    server.connection();
     server.register([require('../'), require('vision')], function (err) {
 
         expect(err).to.not.exist();
@@ -85,7 +83,6 @@ it('doesn\'t include credentials if not authenticated', function (done) {
 it('includes credentials if authenticated', function (done) {
 
     var server = new Hapi.Server();
-    server.connection();
     server.register([require('../'), require('vision')], function (err) {
 
         expect(err).to.not.exist();
@@ -123,7 +120,6 @@ it('includes credentials if authenticated', function (done) {
 it('merges credentials with existing context', function (done) {
 
     var server = new Hapi.Server();
-    server.connection();
     server.register([require('../'), require('vision')], function (err) {
 
         expect(err).to.not.exist();
@@ -161,7 +157,6 @@ it('merges credentials with existing context', function (done) {
 it('does\'t affect non-variety responses', function (done) {
 
     var server = new Hapi.Server();
-    server.connection();
     server.register([require('../'), require('vision')], function (err) {
 
         expect(err).to.not.exist();
