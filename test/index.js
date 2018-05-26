@@ -1,187 +1,167 @@
+'use strict';
 // Load modules
 
-var Code = require('code');
-var Hapi = require('hapi');
-var Lab = require('lab');
+const Code = require('code');
+const Hapi = require('hapi');
+const Lab = require('lab');
 
 
 // Declare internals
 
-var internals = {};
+const internals = {};
 
 
 // Test shortcuts
 
-var lab = exports.lab = Lab.script();
-var describe = lab.describe;
-var it = lab.it;
-var expect = Code.expect;
+const lab = exports.lab = Lab.script();
+const it = lab.it;
+const expect = Code.expect;
 
 
-it('doesn\'t interfere with non view responses', function (done) {
+it('doesn\'t interfere with non view responses', async (done) => {
 
-    var server = new Hapi.Server();
-    server.connection();
-    server.register(require('../'), function (err) {
+    const server = new Hapi.Server();
+    await server.register(require('../'));
 
-        expect(err).to.not.exist();
+    server.route({
+        method: 'GET',
+        path: '/',
+        handler: function (request, h) {
 
-        server.route({
-            method: 'GET',
-            path: '/',
-            handler: function (request, reply) {
+            return 'ok';
+        }
+    });
 
-                return reply('ok');
-            }
-        });
+    const request = { method: 'GET', url: '/' };
 
-        var request = { method: 'GET', url: '/' };
+    server.inject(request, (res) => {
 
-        server.inject(request, function (res) {
-
-            expect(res.result).to.equal('ok');
-            done();
-        });
+        expect(res.result).to.equal('ok');
+        done();
     });
 });
 
-it('doesn\'t include credentials if not authenticated', function (done) {
+it('doesn\'t include credentials if not authenticated', async (done) => {
 
-    var server = new Hapi.Server();
-    server.connection();
-    server.register([require('../'), require('vision')], function (err) {
+    const server = new Hapi.Server();
+    await server.register([require('../'), require('vision')]);
 
-        expect(err).to.not.exist();
+    server.views({
+        engines: {
+            hbs: require('handlebars')
+        },
+        path: __dirname,
+        isCached: false
+    });
 
-        server.views({
-            engines: {
-                hbs: require('handlebars')
-            },
-            path: __dirname,
-            isCached: false
-        });
+    server.route({
+        method: 'GET',
+        path: '/',
+        handler: function (request, h) {
 
-        server.route({
-            method: 'GET',
-            path: '/',
-            handler: function (request, reply) {
+            request.auth.credentials = {};
+            request.auth.credentials.username = 'john';
+            return h.view('test');
+        }
+    });
 
-                request.auth.credentials = {};
-                request.auth.credentials.username = 'john';
-                return reply.view('test');
-            }
-        });
+    const request = { method: 'GET', url: '/' };
 
-        var request = { method: 'GET', url: '/' };
+    server.inject(request, (res) => {
 
-        server.inject(request, function (res) {
-
-            expect(res.result).to.equal('Hello !');
-            done();
-        });
+        expect(res.result).to.equal('Hello !');
+        done();
     });
 });
 
-it('includes credentials if authenticated', function (done) {
+it('includes credentials if authenticated', async (done) => {
 
-    var server = new Hapi.Server();
-    server.connection();
-    server.register([require('../'), require('vision')], function (err) {
+    const server = new Hapi.Server();
+    await server.register([require('../'), require('vision')]);
 
-        expect(err).to.not.exist();
+    server.views({
+        engines: {
+            hbs: require('handlebars')
+        },
+        path: __dirname,
+        isCached: false
+    });
 
-        server.views({
-            engines: {
-                hbs: require('handlebars')
-            },
-            path: __dirname,
-            isCached: false
-        });
+    server.route({
+        method: 'GET',
+        path: '/',
+        handler: function (request, h) {
 
-        server.route({
-            method: 'GET',
-            path: '/',
-            handler: function (request, reply) {
+            request.auth.isAuthenticated = true;
+            request.auth.credentials = {};
+            request.auth.credentials.username = 'john';
+            return h.view('test');
+        }
+    });
 
-                request.auth.isAuthenticated = true;
-                request.auth.credentials = {};
-                request.auth.credentials.username = 'john';
-                return reply.view('test');
-            }
-        });
+    const request = { method: 'GET', url: '/' };
 
-        var request = { method: 'GET', url: '/' };
+    server.inject(request, (res) => {
 
-        server.inject(request, function (res) {
-
-            expect(res.result).to.equal('Hello john!');
-            done();
-        });
+        expect(res.result).to.equal('Hello john!');
+        done();
     });
 });
 
-it('merges credentials with existing context', function (done) {
+it('merges credentials with existing context', async (done) => {
 
-    var server = new Hapi.Server();
-    server.connection();
-    server.register([require('../'), require('vision')], function (err) {
+    const server = new Hapi.Server();
+    await server.register([require('../'), require('vision')]);
 
-        expect(err).to.not.exist();
+    server.views({
+        engines: {
+            hbs: require('handlebars')
+        },
+        path: __dirname,
+        isCached: false
+    });
 
-        server.views({
-            engines: {
-                hbs: require('handlebars')
-            },
-            path: __dirname,
-            isCached: false
-        });
+    server.route({
+        method: 'GET',
+        path: '/',
+        handler: function (request, h) {
 
-        server.route({
-            method: 'GET',
-            path: '/',
-            handler: function (request, reply) {
+            request.auth.isAuthenticated = true;
+            request.auth.credentials = {};
+            request.auth.credentials.username = 'john';
+            return h.view('test', { a: 1 });
+        }
+    });
 
-                request.auth.isAuthenticated = true;
-                request.auth.credentials = {};
-                request.auth.credentials.username = 'john';
-                return reply.view('test', { a: 1 });
-            }
-        });
+    const request = { method: 'GET', url: '/' };
 
-        var request = { method: 'GET', url: '/' };
+    server.inject(request, (res) => {
 
-        server.inject(request, function (res) {
-
-            expect(res.result).to.equal('Hello john!');
-            done();
-        });
+        expect(res.result).to.equal('Hello john!');
+        done();
     });
 });
 
-it('does\'t affect non-variety responses', function (done) {
+it('does\'t affect non-variety responses', async (done) => {
 
-    var server = new Hapi.Server();
-    server.connection();
-    server.register([require('../'), require('vision')], function (err) {
+    const server = new Hapi.Server();
+    await server.register([require('../'), require('vision')]);
 
-        expect(err).to.not.exist();
+    server.route({
+        method: 'GET',
+        path: '/',
+        handler: function (request, h) {
 
-        server.route({
-            method: 'GET',
-            path: '/',
-            handler: function (request, reply) {
+            throw new Error('error');
+        }
+    });
 
-                reply(new Error('error'));
-            }
-        });
+    const request = { method: 'GET', url: '/' };
 
-        var request = { method: 'GET', url: '/' };
+    server.inject(request, (res) => {
 
-        server.inject(request, function (res) {
-
-            expect(res.statusCode).to.equal(500);
-            done();
-        });
+        expect(res.statusCode).to.equal(500);
+        done();
     });
 });
 
