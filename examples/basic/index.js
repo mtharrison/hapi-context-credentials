@@ -4,15 +4,13 @@ const Hapi = require('hapi');
 
 const server = new Hapi.Server({ port: 4000 });
 
-server.register([
-    { register: require('vision') },
-    { register: require('hapi-auth-basic') },
-    { register: require('../../index') }
-], (err) => {
+(async () => {
 
-    if (err) {
-        throw err;
-    }
+    await server.register([
+        { plugin: require('vision') },
+        { plugin: require('hapi-auth-basic') },
+        { plugin: require('../../index') }
+    ]);
 
     server.views({
         engines: {
@@ -22,20 +20,20 @@ server.register([
         isCached: false
     });
 
-    const validateFunc = function (request, username, password, callback) {
+    const validate = function (request, username, password) {
 
         // Just authenticate everyone and store username
         // in credentials
 
         if (username === 'john' && password === 'secret') {
-            return callback(null, true, { username: 'john' });
+            return { isValid: true, credentials: { username: 'john' } };
         }
 
-        return callback(null, false, {});
+        return { isValid: false };
     };
 
     server.auth.strategy('simple', 'basic', {
-        validateFunc
+        validate
     });
 
     server.route([
@@ -48,9 +46,9 @@ server.register([
             },
             method: 'GET',
             path: '/',
-            handler: function (request, reply) {
+            handler: function (request, h) {
 
-                reply.view('home');
+                return h.view('home');
             }
         },
         {
@@ -61,15 +59,13 @@ server.register([
             },
             method: 'GET',
             path: '/login',
-            handler: function (request, reply) {
+            handler: function (request, h) {
 
-                return reply.redirect('/');
+                return h.redirect('/');
             }
         }
     ]);
 
-    server.start(() => {
-
-        console.log('Started serverx');
-    });
-});
+    await server.start();
+    console.log('Started serverx');
+})();
